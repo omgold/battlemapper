@@ -39,8 +39,7 @@ var effect_colors = {
 }
 
 function startDrag( event ) {
-    event.dataTransfer.setData( "text/plain", event.target.id );
-    event.dataTransfer.setData( "text/uri-list", "" );
+    event.dataTransfer.setData( "text", event.target.id );
 }
 
 function startTouch( event ) {
@@ -93,50 +92,47 @@ function placeEffect( id )
 
 function dropOnImage( event ) {
     event.preventDefault();
-    var id = event.dataTransfer.getData("text/uri-list");
-    if ( id == "" ) {
-        var id = event.dataTransfer.getData("text/plain");
-        if ( id.search( /^creature-img2-/ ) != -1 )
-        {
-            var char = document.getElementById( id );
-            var char_config = config.creatures[char.name];
-            var size = char_config.size;
-            if ( size == undefined )
-                size = 1;
-            var map = document.getElementById("map");
-            var map_width = map.width;
-            var map_height = map.height;
-            var gridsize_x = Math.abs( config.x2 - config.x1 ) / config.gx;
-            var gridsize_y = Math.abs( config.y2 - config.y1 ) / config.gy;
-            var rect = map.getBoundingClientRect();
-            var left = Math.min( config.x1, config.x2 );
-            var top = Math.min( config.y1, config.y2 );
-            var x = ( event.clientX - rect.left ) / map_width - left;
-            var y = ( event.clientY - rect.top ) / map_height - top;
-            char_config.x = Math.round( x/gridsize_x - size/2. );
-            char_config.y = Math.round( y/gridsize_y - size/2. );
-            placeChar( char.name );
-            saveConfig();
-        } else if ( id.search( /^effect-img-/ ) != -1 ) {
-            var effect = document.getElementById( id );
-            var effect_config = config.effects[effect.name];
-            var sizex = effect_types[effect_config.type].sx;
-            var sizey = effect_types[effect_config.type].sy;
-            var map = document.getElementById("map");
-            var map_width = map.width;
-            var map_height = map.height;
-            var gridsize_x = Math.abs( config.x2 - config.x1 ) / config.gx;
-            var gridsize_y = Math.abs( config.y2 - config.y1 ) / config.gy;
-            var rect = map.getBoundingClientRect();
-            var left = Math.min( config.x1, config.x2 );
-            var top = Math.min( config.y1, config.y2 );
-            var x = ( event.clientX - rect.left ) / map_width - left;
-            var y = ( event.clientY - rect.top ) / map_height - top;
-            effect_config.x = Math.round( x/gridsize_x - sizex/2. );
-            effect_config.y = Math.round( y/gridsize_y - sizey/2. );
-            placeEffect( effect.name );
-            saveConfig();
-        }
+    var id = event.dataTransfer.getData("text");
+    if ( id.search( /^creature-img2-/ ) != -1 )
+    {
+        var char = document.getElementById( id );
+        var char_config = config.creatures[char.name];
+        var size = char_config.size;
+        if ( size == undefined )
+            size = 1;
+        var map = document.getElementById("map");
+        var map_width = map.width;
+        var map_height = map.height;
+        var gridsize_x = Math.abs( config.x2 - config.x1 ) / config.gx;
+        var gridsize_y = Math.abs( config.y2 - config.y1 ) / config.gy;
+        var rect = map.getBoundingClientRect();
+        var left = Math.min( config.x1, config.x2 );
+        var top = Math.min( config.y1, config.y2 );
+        var x = ( event.clientX - rect.left ) / map_width - left;
+        var y = ( event.clientY - rect.top ) / map_height - top;
+        char_config.x = Math.round( x/gridsize_x - size/2. );
+        char_config.y = Math.round( y/gridsize_y - size/2. );
+        placeChar( char.name );
+        saveConfig();
+    } else if ( id.search( /^effect-img-/ ) != -1 ) {
+        var effect = document.getElementById( id );
+        var effect_config = config.effects[effect.name];
+        var sizex = effect_types[effect_config.type].sx;
+        var sizey = effect_types[effect_config.type].sy;
+        var map = document.getElementById("map");
+        var map_width = map.width;
+        var map_height = map.height;
+        var gridsize_x = Math.abs( config.x2 - config.x1 ) / config.gx;
+        var gridsize_y = Math.abs( config.y2 - config.y1 ) / config.gy;
+        var rect = map.getBoundingClientRect();
+        var left = Math.min( config.x1, config.x2 );
+        var top = Math.min( config.y1, config.y2 );
+        var x = ( event.clientX - rect.left ) / map_width - left;
+        var y = ( event.clientY - rect.top ) / map_height - top;
+        effect_config.x = Math.round( x/gridsize_x - sizex/2. );
+        effect_config.y = Math.round( y/gridsize_y - sizey/2. );
+        placeEffect( effect.name );
+        saveConfig();
     } else {
         var url = document.getElementById("url");
         url.value = id;
@@ -192,7 +188,7 @@ function endTouchEffect( event ) {
 
 function dropOnUrl( event ) {
     event.preventDefault();
-    var id = event.dataTransfer.getData("text/uri-list");
+    var id = event.dataTransfer.getData("text");
     var url = document.getElementById("url");
     url.value = id;
     doSetImage();
@@ -200,7 +196,7 @@ function dropOnUrl( event ) {
 
 function dropOnCharUrl( event ) {
     event.preventDefault();
-    var id = event.dataTransfer.getData("text/uri-list");
+    var id = event.dataTransfer.getData("text");
     var url = event.target;
     url.value = id;
     doSetCharImage( url.parentElement.name );
@@ -208,7 +204,7 @@ function dropOnCharUrl( event ) {
 
 function dropOnCharImg( event ) {
     event.preventDefault();
-    var id = event.dataTransfer.getData("text/uri-list");
+    var id = event.dataTransfer.getData("text");
     var url = document.getElementById( "creature-url-"+ event.target.parentElement.name );
     url.value = id;
     doSetCharImage( url.parentElement.name );
