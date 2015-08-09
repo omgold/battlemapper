@@ -1,0 +1,475 @@
+<html>
+<head style="margin-top: 0px margin-bottom: 0px">
+<title>The Battlemapper</title>
+<script language="javascript">
+var pick_mode = 0;
+var config = {}
+var next_char_id = 0;
+var touch_move_target = null;
+
+function startDrag( event ) {
+    event.dataTransfer.setData( "text/plain", event.target.id );
+    event.dataTransfer.setData( "text/uri-list", "" );
+}
+
+function startTouch( event ) {
+    touch_move_target=event.target;
+}
+
+function allowDrop( event ) {
+    event.preventDefault();
+}
+
+function placeChar( id )
+{
+    var map = document.getElementById("map");
+    var map_width = map.width;
+    var map_height = map.height;
+    var gridsize_x = Math.abs( config.x2 - config.x1 ) / config.gx;
+    var gridsize_y = Math.abs( config.y2 - config.y1 ) / config.gy;
+    var char = document.getElementById( "creature-img2-"+id );
+    var char_config = config.creatures[id];
+    var char_width = char.width;
+    var char_height = char.height;
+    var rect = map.getBoundingClientRect();
+    var left = Math.min( config.x1, config.x2 );
+    var top = Math.min( config.y1, config.y2 );
+    var offset_x = ( gridsize_x * map_width - char_width ) / 2;
+    var offset_y = ( gridsize_y * map_height - char_height ) / 2;
+    char.style.left = ( char_config.x * gridsize_x + left ) * map_width + offset_x;
+    char.style.top = ( char_config.y * gridsize_y + top ) * map_height + offset_y;
+    char.width = char.width;
+}
+
+function dropOnImage( event ) {
+    event.preventDefault();
+    var id = event.dataTransfer.getData("text/uri-list");
+    if ( id == "" ) {
+        var id = event.dataTransfer.getData("text/plain");
+        if ( id.search( /^creature-img2-/ ) == -1 )
+            return;
+        var char = document.getElementById( id );
+        var char_config = config.creatures[char.name];
+        var map = document.getElementById("map");
+        var map_width = map.width;
+        var map_height = map.height;
+        var gridsize_x = Math.abs( config.x2 - config.x1 ) / config.gx;
+        var gridsize_y = Math.abs( config.y2 - config.y1 ) / config.gy;
+        var rect = map.getBoundingClientRect();
+        var left = Math.min( config.x1, config.x2 );
+        var top = Math.min( config.y1, config.y2 );
+        var x = ( event.clientX - rect.left ) / map_width - left;
+        var y = ( event.clientY - rect.top ) / map_height - top;
+        char_config.x = Math.floor( x/gridsize_x );
+        char_config.y = Math.floor( y/gridsize_y );
+        placeChar( char.name );
+        saveConfig();
+    } else {
+        var url = document.getElementById("url");
+        url.value = id;
+        var url = event.dataTransfer.getData("text");
+        doSetImage();
+    }
+}
+
+function endTouch( event ) {
+    var touch = event.changedTouches[0];
+    var char = event.target;
+    var char_config = config.creatures[char.name];
+    var map = document.getElementById("map");
+    var map_width = map.width;
+    var map_height = map.height;
+    var gridsize_x = Math.abs( config.x2 - config.x1 ) / config.gx;
+    var gridsize_y = Math.abs( config.y2 - config.y1 ) / config.gy;
+    var rect = map.getBoundingClientRect();
+    var left = Math.min( config.x1, config.x2 );
+    var top = Math.min( config.y1, config.y2 );
+    var x = ( touch.clientX - rect.left ) / map_width - left;
+    var y = ( touch.clientY - rect.top ) / map_height - top;
+    char_config.x = Math.floor( x/gridsize_x );
+    char_config.y = Math.floor( y/gridsize_y );
+    placeChar( char.name );
+    saveConfig();
+}
+
+function dropOnUrl( event ) {
+    event.preventDefault();
+    var id = event.dataTransfer.getData("text/uri-list");
+    var url = document.getElementById("url");
+    url.value = id;
+    doSetImage();
+}
+
+function dropOnCharUrl( event ) {
+    event.preventDefault();
+    var id = event.dataTransfer.getData("text/uri-list");
+    var url = event.target;
+    url.value = id;
+    doSetCharImage( url.parentElement.name );
+}
+
+function dropOnCharImg( event ) {
+    event.preventDefault();
+    var id = event.dataTransfer.getData("text/uri-list");
+    var url = document.getElementById( "creature-url-"+ event.target.parentElement.name );
+    url.value = id;
+    doSetCharImage( url.parentElement.name );
+}
+
+function adjustFrame() {
+    var map = document.getElementById("map");
+    var scale = document.getElementById( "scale" );
+    if ( scale.value == "" ) {
+        scale.value = 100;
+        map.width = map.naturalWidth;
+    } else {
+        map.width = map.naturalWidth * scale.value / 100;
+    }
+    map.style.top = 0;
+    for( creature_id in config.creatures )
+    {
+        adjustCharImage( creature_id );
+    }
+}
+
+function doSetImage() {
+    var url = document.getElementById("url").value;
+    config.url = url;
+    //var dm = parseFloat( form[ "dm" ].value );
+    var map = document.getElementById("map");
+    map.src = url;
+    var x1 = document.getElementById( "x1" );
+    var y1 = document.getElementById( "y1" );
+    var x2 = document.getElementById( "x2" );
+    var y2 = document.getElementById( "y2" );
+    if ( config.x1 == null ) {
+        config.x1 = x1.value = 0;
+        config.y1 = y1.value = 0;
+    }
+    if ( config.x2 == null ) {
+        config.x2 = x2.value = 1;
+        config.y2 = y2.value = 1;
+    }
+    var gx = document.getElementById( "gx" );
+    var gy = document.getElementById( "gy" );
+    if ( config.gx == null ) {
+        config.gx = gx.value = 10;
+        config.gy = gy.value = 10;
+    }
+    document.getElementById( "scale" ).value = "100";
+    config.scale_val = 100;
+    saveConfig();
+}
+
+function adjustCharImage( id )
+{
+    var map = document.getElementById("map");
+    var map_width = map.width;
+    var map_height = map.height;
+    var gridsize_x = Math.abs( map_width * ( config.x2 - config.x1 ) ) / config.gx;
+    var gridsize_y = Math.abs( map_height * ( config.y2 - config.y1 ) ) / config.gy;
+    var img = document.getElementById("creature-img2-"+id);
+
+    if ( img.naturalWidth * gridsize_y > img.naturalHeight * gridsize_x )
+    {
+        img.width = gridsize_x;
+        img.height = img.naturalHeight * gridsize_x / img.naturalWidth;
+    } else {
+img.height = gridsize_y;
+        if ( img.naturalWidth != 0 )
+            img.width = img.naturalWidth * gridsize_y / img.naturalHeight;
+        else
+            img.width = gridsize_x;
+    }
+    placeChar( id );
+}
+
+function updateCharImage( id, url, name )
+{
+    var img = document.getElementById("creature-img1-"+id);
+    img.src = url;
+    img = document.getElementById("creature-img2-"+id);
+    img.src = url;
+    img.title = name;
+}
+
+function doSetCharImage( id ) {
+    var url = document.getElementById("creature-url-"+id).value;
+    var name = document.getElementById("creature-name-"+id).value;
+    updateCharImage( id, url, name );
+    config.creatures[id].url = url;
+    config.creatures[id].name = name;
+    saveConfig();
+}
+
+function doDeleteChar( id ) {
+    var sidebar = document.getElementById( "sidebar" );
+    var dialog = document.getElementById("creature-"+id);
+    sidebar.removeChild( dialog );
+    var canvas = document.getElementById( "canvas" );
+    var img = document.getElementById("creature-img2-"+id);
+    canvas.removeChild( img );
+    delete config.creatures[id];
+    saveConfig();
+}
+
+function doPickCorner1( event ) {
+    var button = document.getElementById( "pick1" );
+    if ( pick_mode == 1 ) {
+        pick_mode = 0;
+    } else {
+        pick_mode = 1;
+    }
+}
+
+function doPickCorner2( event ) {
+    var button = document.getElementById( "pick1" );
+    if ( pick_mode == 2 ) {
+        pick_mode = 0;
+    } else {
+        pick_mode = 2;
+    }
+}
+
+function doClickImage( event ) {
+    var map = document.getElementById("map");
+    var rect = map.getBoundingClientRect();
+    var x = ( event.clientX - rect.left ) / ( rect.right - rect.left );
+    var y = ( event.clientY - rect.top  ) / ( rect.bottom - rect.top );
+    if (pick_mode == 0 ) {
+        return;
+    } else if ( pick_mode == 1 ) {
+        var xo = document.getElementById( "x1" );
+        var yo = document.getElementById( "y1" );
+        config.x1 = x;
+        config.y1 = y;
+    } else if ( pick_mode == 2 ) {
+        var xo = document.getElementById( "x2" );
+        var yo = document.getElementById( "y2" );
+        config.x2 = x;
+        config.y2 = y;
+    }
+    xo.value = x;
+    yo.value = y;
+    pick_mode = 0;
+    for( creature_id in config.creatures )
+    {
+        adjustCharImage( creature_id );
+    }
+    saveConfig();
+}
+
+function saveConfig() {
+    window.sessionStorage.config = JSON.stringify( config );
+}
+
+function doLoad() {
+    if ( window.sessionStorage.config == null ) {
+        config.creatures = {}
+    } else {
+        config = JSON.parse( window.sessionStorage.config );
+        var scale = document.getElementById( "scale" );
+        var map = document.getElementById("map");
+        var url = document.getElementById("url");
+        var scale_val = config.scale_val;
+        if ( scale_val == null )
+            scale_val = 100;
+        scale.value = scale_val;
+        if ( config.url != null )
+        {
+            map.src = config.url;
+            url.value = config.url;
+        }
+        var x1 = document.getElementById( "x1" );
+        var y1 = document.getElementById( "y1" );
+        if ( config.x1 != null )
+        {
+            x1.value = config.x1;
+            y1.value = config.y1;
+        }
+        var x2 = document.getElementById( "x2" );
+        var y2 = document.getElementById( "y2" );
+        if ( config.x2 != null )
+        {
+            x2.value = config.x2;
+            y2.value = config.y2;
+        }
+        var gx = document.getElementById( "gx" );
+        var gy = document.getElementById( "gy" );
+        if ( config.gx != null )
+        {
+            gx.value = config.gx;
+            gy.value = config.gy;
+        }
+        for( id in config.creatures) {
+            doAddChar( id );
+        }
+    }
+}
+
+function copyToClipboard( id ) {
+    window.prompt("Copy URL to clipboard: Ctrl+C, Enter", "http://battlemapper.org/load_map.php?id="+id);
+}
+
+function doSaveMap() {
+    var input = document.getElementById( "post-config" );
+    input.value=window.sessionStorage.config;
+}
+
+function doReset() {
+    id=window.sessionStorage.orig_id;
+    if ( id != null ) {
+        window.location.replace("/load_map.php?id="+id);
+    }
+}
+
+function doSetScale() {
+    var scale = document.getElementById( "scale" );
+    config.scale_val = scale.value;
+    saveConfig();
+    adjustFrame();
+}
+
+function doSetGrid() {
+    var gx = document.getElementById( "gx" );
+    var gy = document.getElementById( "gy" );
+    config.gx = gx.value;
+    config.gy = gy.value;
+    for( creature_id in config.creatures )
+    {
+        adjustCharImage( creature_id );
+    }
+    saveConfig();
+}
+
+function doChangeScale( factor ) {
+    var scale = document.getElementById( "scale" );
+    scale_val = scale.value * factor;
+    scale.value = scale_val;
+    config.scale_val = scale_val;
+    saveConfig();
+    adjustFrame();
+}
+
+function doAddChar( creature_id, clone ) {
+    if ( creature_id == null )
+    {
+        var creature_config = null;
+        creature_id = next_char_id.toString();
+        next_char_id++;
+        config.creatures[creature_id]={url:"",name:""}
+        saveConfig();
+    } else {
+        creature_id = parseInt( creature_id );
+        var creature_config = config.creatures[creature_id];
+        if ( clone ) {
+            var creature_config = JSON.parse( JSON.stringify( creature_config ) );
+            creature_id = next_char_id.toString();
+            next_char_id++;
+            config.creatures[creature_id] = creature_config;
+            saveConfig();
+        } else {
+            if ( next_char_id <= creature_id )
+                next_char_id = creature_id + 1;
+        }
+    }
+    var sidebar = document.getElementById( "sidebar" );
+    var fieldset = document.createElement( "fieldset" );
+    fieldset.style.padding="2mm";
+    fieldset.id="creature-"+creature_id;
+    fieldset.name=creature_id;
+    fieldset.appendChild( document.createTextNode( "Name: " ) );
+    var name = document.createElement( "input" );
+    name.id="creature-name-"+creature_id;
+    name.size=20;
+    name.maxlength=30;
+    fieldset.appendChild( name );
+    fieldset.appendChild( document.createElement( "br" ) );
+    fieldset.appendChild( document.createTextNode( "Avatar URL: " ) );
+    var url = document.createElement( "input" );
+    url.id="creature-url-"+creature_id;
+    url.size=20;
+    url.maxlength=1000;
+    url.addEventListener( "dragover", function( event ) { allowDrop( event ) } );
+    url.addEventListener( "drop", function( event ) { dropOnCharUrl( event ) } );
+    url.style.padding="0.5mm";
+    url.style.marginTop="2mm";
+    fieldset.appendChild( url );
+    fieldset.appendChild( document.createElement( "br" ) );
+    var img = document.createElement( "img" );
+    img.id="creature-img1-"+creature_id;
+    //img.style.width="10mm";
+    img.style.height="10mm";
+    img.style.marginTop="2mm";
+    //img.style.clip="rect( 200px, 400px, 400px, 200px)"
+    img.src="";
+    img.addEventListener( "dragover", function( event ) { allowDrop( event ) } );
+    img.addEventListener( "drop", function( event ) { dropOnCharImg( event ) } );
+    fieldset.appendChild( img );
+    img = document.createElement( "img" );
+    img.id="creature-img2-"+creature_id;
+    img.name=creature_id;
+    img.draggable = true;
+    img.addEventListener( "dragstart", function( event ) { startDrag( event ) } );
+    img.addEventListener( "load", function() { adjustCharImage( creature_id ) } );
+    img.addEventListener( "touchstart", function( event ) { startTouch( event ) } );
+    img.addEventListener( "touchmove", function( event ) { allowDrop( event ) } );
+    img.addEventListener( "touchend", function( event ) { endTouch( event ) } );
+    img.addEventListener( "dragover", function( event ) { allowDrop( event ) } );
+    img.addEventListener( "drop", function( event ) { dropOnImage( event ) } );
+    img.style.position="absolute";
+    var canvas = document.getElementById( "canvas" );
+    canvas.appendChild( img );
+    var button = document.createElement( "button" );
+    button.appendChild( document.createTextNode( "set" ) );
+    button.addEventListener( "click", function() { doSetCharImage( creature_id ) } );
+    fieldset.appendChild( button );
+    var button = document.createElement( "button" );
+    button.appendChild( document.createTextNode( "delete" ) );
+    button.addEventListener( "click", function() { doDeleteChar( creature_id ) } );
+    fieldset.appendChild( button );
+    var button = document.createElement( "button" );
+    button.appendChild( document.createTextNode( "clone" ) );
+    button.addEventListener( "click", function() { doAddChar( creature_id, true ) } );
+    fieldset.appendChild( button );
+    sidebar.appendChild( fieldset );
+    if ( creature_config != null )
+    {
+        url.value = creature_config.url;
+        name.value = creature_config.name;
+        updateCharImage( creature_id, creature_config.url, name.value );
+    }
+}
+
+</script>
+<style media="screen" type="text/css">
+fieldset, legend, label, input { margin: 0; padding: 0;}
+fieldset { padding: 2mm; margin-left: 0; margin-right: 0; margin-top: 1mm; margin-bottom: 0 }
+input { margin-top: 2mm; padding: 0.5mm }
+button { margin-left: 1mm; margin-right: 1mm }
+</style>
+</head>
+<body onLoad="doLoad()" style="margin-top: 0vh; margin-bottom: 0.5vh">
+<div style="position: absolute"><img src="battlemapper.png" style="height: 4.5vh"/></div><div style="font-size: 2.8vh; margin-top: 0.5vh; position: absolute; left: 22vh"><b id="beta">(beta)</b></div>
+<div style="position: absolute; right: 0vw; top: 1vh"><form action="save_map.php" method="post" onsubmit="doSaveMap()"><input type="hidden" id="post-config" name="config"/><button type="submit" style="font-size: 1.7vh; height: 3vh">save map</button><button type="button" onclick="doReset()" style="font-size: 1.7vh; height: 3vh">reset</button><button type="button" onclick="copyToClipboard( window.sessionStorage.orig_id )" style="font-size: 1.7vh; height: 3vh">copy URL</button><a href="mailto:support@battlemapper.org">contact</a></form></div>
+<div id="canvas" style="overflow-x: scroll; width: 74vw; height: 95vh; margin-left: 0px; margin-right: 0px; position: absolute; top: 4.5vh">
+<img id="map" src="data:image/png;base64,
+iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgAQMAAABHGizWAAAABlBMVEUAAAD///+l2Z/dAAAAsUlE
+QVR42u3asQ0AIAgEQPbfwGm1wxajFsaj/ISEaz9Ey+k51SxmGDnV7NTy1tnMzMzMzMzMzMzMzMzM
+zMzMzL+Z11duAsrZ1tnMzMzMzMzMzMzMzMzMzMzMzP+a9Z7MzMzMzMzMzMzMzMzMzMzMzP7D9J7M
+zMzMzMzMzMzMzMzMzMzMzP7D9J7MzMzMzMzMzMzMzMzMzMzMzP7D9J7MzMzMzMzMzMzMzMzMzMzM
+zM+YB4pKpbTFzUk/AAAAAElFTkSuQmCC" draggable="false" onClick="doClickImage( event )" onLoad="adjustFrame()" ondragover="allowDrop(event)" ondrop="dropOnImage(event)" style="position: absolute">
+</div><div id="sidebar" style="overflow-x: scroll; width: 24vw; height: 95vh; margin-left: 1vw; margin-right: 0px; position: absolute; left: 74vw; top: 4.5vh">
+<fieldset>
+<legend>Source Image</legend>
+Image URL:<br><input id="url" type="url" draggable="false" ondragover="allowDrop(event)" ondrop="dropOnUrl(event)" size="20" maxlength="1000"/><button id="set-image" type="button" onclick="doSetImage()">Set</button><p>
+Scaling:<br><input id="scale" type="number" size="6" maxlength="15"/>%<button id="set-scale" type="button" onclick="doSetScale()"/>Set</button><nobr><button id="decrease-scale" type="button" onclick="doChangeScale(1./1.2)">-</button><button id="increase-scale" type="button" onclick="doChangeScale(1.2)">+</button></nobr><p>
+Corner 1:<br><input id="x1" type="number" size="6" maxlength="15"/>/<input id="y1" type="number" size=6 maxlength=15><button id="pick1" type="button" onclick="doPickCorner1()">Pick</button><p>
+Corner 2:<br><input id="x2" type="number" size="6" maxlength="15"/>/<input id="y2" type="number" size=6 maxlength=15><button id="pick2" type="button" onclick="doPickCorner2()">Pick</button><p>
+Grid:<br><input id="gx" type="number" size="6" maxlength="15"/>x<input id="gy" type="number" size="6" maxlength="15"/><button id="set-grid" type="button" onclick="doSetGrid()">Set</button><p>
+</fieldset>
+<button id="set-grid" type="button" onclick="doAddChar()" style="margin-left: 0; margin-top: 1mm; margin-bottom: 1mm">add creature/character</button>
+</div>
+</div>
+</body>
+</html>
