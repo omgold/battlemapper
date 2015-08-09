@@ -31,11 +31,14 @@ function placeChar( id )
     var char_config = config.creatures[id];
     var char_width = char.width;
     var char_height = char.height;
+    var size = config.creatures[id].size;
+    if ( size == undefined )
+        size = 1;
     var rect = map.getBoundingClientRect();
     var left = Math.min( config.x1, config.x2 );
     var top = Math.min( config.y1, config.y2 );
-    var offset_x = ( gridsize_x * map_width - char_width ) / 2;
-    var offset_y = ( gridsize_y * map_height - char_height ) / 2;
+    var offset_x = ( gridsize_x * map_width * size - char_width ) / 2;
+    var offset_y = ( gridsize_y * map_height * size - char_height ) / 2;
     char.style.left = ( char_config.x * gridsize_x + left ) * map_width + offset_x;
     char.style.top = ( char_config.y * gridsize_y + top ) * map_height + offset_y;
     char.width = char.width;
@@ -50,6 +53,9 @@ function dropOnImage( event ) {
             return;
         var char = document.getElementById( id );
         var char_config = config.creatures[char.name];
+        var size = char_config.size;
+        if ( size == undefined )
+            size = 1;
         var map = document.getElementById("map");
         var map_width = map.width;
         var map_height = map.height;
@@ -60,8 +66,8 @@ function dropOnImage( event ) {
         var top = Math.min( config.y1, config.y2 );
         var x = ( event.clientX - rect.left ) / map_width - left;
         var y = ( event.clientY - rect.top ) / map_height - top;
-        char_config.x = Math.floor( x/gridsize_x );
-        char_config.y = Math.floor( y/gridsize_y );
+        char_config.x = Math.round( x/gridsize_x - size/2. );
+        char_config.y = Math.round( y/gridsize_y - size/2. );
         placeChar( char.name );
         saveConfig();
     } else {
@@ -169,17 +175,19 @@ function adjustCharImage( id )
     var gridsize_x = Math.abs( map_width * ( config.x2 - config.x1 ) ) / config.gx;
     var gridsize_y = Math.abs( map_height * ( config.y2 - config.y1 ) ) / config.gy;
     var img = document.getElementById("creature-img2-"+id);
-
+    var size = config.creatures[id].size;
+    if ( size == undefined )
+        size = 1;
     if ( img.naturalWidth * gridsize_y > img.naturalHeight * gridsize_x )
     {
-        img.width = gridsize_x;
-        img.height = img.naturalHeight * gridsize_x / img.naturalWidth;
+        img.width = size * gridsize_x;
+        img.height = size * img.naturalHeight * gridsize_x / img.naturalWidth;
     } else {
-img.height = gridsize_y;
+        img.height = size * gridsize_y;
         if ( img.naturalWidth != 0 )
-            img.width = img.naturalWidth * gridsize_y / img.naturalHeight;
+            img.width = size * img.naturalWidth * gridsize_y / img.naturalHeight;
         else
-            img.width = gridsize_x;
+            img.width = size * gridsize_x;
     }
     placeChar( id );
 }
@@ -200,6 +208,16 @@ function doSetCharImage( id ) {
     config.creatures[id].url = url;
     config.creatures[id].name = name;
     saveConfig();
+}
+
+function doChangeCharSize( id ) {
+    var state = document.getElementById("creature-large-"+id).checked;
+    if ( state )
+        config.creatures[id].size = 2;
+    else
+        config.creatures[id].size = 1;
+    saveConfig();
+    adjustCharImage( id );
 }
 
 function doDeleteChar( id ) {
@@ -357,7 +375,7 @@ function doAddChar( creature_id, clone ) {
         var creature_config = null;
         creature_id = next_char_id.toString();
         next_char_id++;
-        config.creatures[creature_id]={url:"",name:""}
+        config.creatures[creature_id]={url:"",name:"",size:1,x:0,y:0}
         saveConfig();
     } else {
         creature_id = parseInt( creature_id );
@@ -408,6 +426,7 @@ function doAddChar( creature_id, clone ) {
     fieldset.appendChild( img );
     img = document.createElement( "img" );
     img.id="creature-img2-"+creature_id;
+    img.src="";
     img.name=creature_id;
     img.draggable = true;
     img.addEventListener( "dragstart", function( event ) { startDrag( event ) } );
@@ -432,11 +451,20 @@ function doAddChar( creature_id, clone ) {
     button.appendChild( document.createTextNode( "clone" ) );
     button.addEventListener( "click", function() { doAddChar( creature_id, true ) } );
     fieldset.appendChild( button );
+    fieldset.appendChild( document.createTextNode( "large: " ) );
+    var check = document.createElement( "input" );
+    check.id="creature-large-"+creature_id;
+    check.type = "checkbox";
+    check.addEventListener( "change", function() { doChangeCharSize( creature_id ) } );
+    fieldset.appendChild( check );
     sidebar.appendChild( fieldset );
+    adjustCharImage( creature_id );
     if ( creature_config != null )
     {
         url.value = creature_config.url;
         name.value = creature_config.name;
+        if ( creature_config.size == 2)
+             check.checked = true;
         updateCharImage( creature_id, creature_config.url, name.value );
     }
 }
