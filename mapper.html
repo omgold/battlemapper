@@ -612,7 +612,7 @@ function doAddAreaEffect( effect_id ) {
         var effect_config = null;
         effect_id = next_effect_id.toString();
         next_effect_id++;
-        config.effects[effect_id]={color:"gray",desc:"",type:"r5",x:0,y:0}
+        config.effects[effect_id]={color:"red",desc:"",type:"r5",x:0,y:0}
         saveConfig();
     } else {
         effect_id = parseInt( effect_id );
@@ -672,6 +672,7 @@ function doAddAreaEffect( effect_id ) {
     img.id="effect-img-"+effect_id;
     img.name=effect_id;
     img.draggable = true;
+    img.addEventListener( "load", function() { adjustEffectImage( effect_id ) } );
     img.addEventListener( "dragstart", function( event ) { startDrag( event ) } );
     img.addEventListener( "touchstart", function( event ) { startTouch( event ) } );
     img.addEventListener( "touchmove", function( event ) { allowDrop( event ) } );
