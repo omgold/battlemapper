@@ -11,7 +11,7 @@ button { margin-left: 1mm; margin-right: 1mm }
 </head>
 <body onLoad="doLoad()" style="margin-top: 0vh; margin-bottom: 0.5vh">
 <div style="position: absolute"><img src="battlemapper.png" style="height: 4.5vh"/></div><div style="font-size: 2.8vh; margin-top: 0.5vh; position: absolute; left: 22vh"><b id="beta">(beta)</b></div>
-<div style="position: absolute; right: 0vw; top: 1vh"><form action="save_map.php" method="post" onsubmit="doSaveMap()"><input type="hidden" id="post-config" name="config"/><button type="submit" style="font-size: 1.7vh; height: 3vh">save map</button><button type="button" onclick="doReset()" style="font-size: 1.7vh; height: 3vh">reset</button><button type="button" onclick="copyToClipboard( window.sessionStorage.orig_id )" style="font-size: 1.7vh; height: 3vh">copy URL</button><a href="mailto:support@battlemapper.org">contact</a></form></div>
+<div style="position: absolute; right: 0vw; top: 1vh"><form action="save_map.php" method="post" onsubmit="doSaveMap()"><input type="hidden" id="post-config" name="config"/><button type="submit" style="font-size: 1.7vh; height: 3vh">save map</button><button type="button" onclick="doReset()" style="font-size: 1.7vh; height: 3vh">reset</button><button type="button" onclick="copyToClipboard( window.sessionStorage.orig_id )" style="font-size: 1.7vh; height: 3vh">copy URL</button><a href="usage.html">howto</a> <a href="mailto:support@battlemapper.org">contact</a></form></div>
 <div id="canvas" style="overflow-x: scroll; width: 74vw; height: 95vh; margin-left: 0px; margin-right: 0px; position: absolute; top: 4.5vh">
 <img id="map" src="data:image/png;base64,
 iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgAQMAAABHGizWAAAABlBMVEUAAAD///+l2Z/dAAAAsUlE
