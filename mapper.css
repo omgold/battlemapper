@@ -1,0 +1,138 @@
+legend, label, input, div, body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial,sans-serif
+}
+
+fieldset {
+    padding: 2mm;
+    margin-left: 2mm;
+    margin-right: 2mm;
+    margin-top: 1mm;
+    margin-bottom: 0;
+    border-radius: 2mm;
+    background: linear-gradient(350deg, #f0e0c0, #fff8f0);
+}
+
+legend {
+    box-shadow: 0 1mm 0 #FFFFFF;
+    background: linear-gradient(350deg, #c0a070, #fff0e0);
+    border-radius: 2mm;
+    box-shadow: 0.5mm 0.5mm 0 #c0a070;
+    padding: 1mm;
+}
+
+input {
+    margin-top: 2mm;
+    padding: 0.5mm;
+}
+
+button, select {
+    margin-left: 0.5mm;
+    margin-right: 0.5mm;
+    border: 0 solid;
+    border-radius: 2mm;
+    padding-left: 1mm;
+    padding-right: 1mm;
+    padding-top: 0.1mm;
+    padding-bottom: 0.1mm;
+    box-shadow: 0.5mm 0.5mm 0 #c0a070;
+    background: linear-gradient(350deg, #c0a070, #fff0e0);
+    font-family: inherit;
+}
+
+a {
+    color: #000000;
+    text-decoration: none;
+    background: linear-gradient(350deg, #f0e0c0, #fff8f0);
+    box-shadow: 0.5mm 0.5mm 0 #c0a070;
+    border-radius: 2mm;
+    padding-left: 3mm;
+    padding-right: 3mm;
+    padding-top: 1mm;
+    padding-bottom: 1mm;
+}
+a:hover {
+    color: #0000c0;
+}
+
+div.structure {
+    position: absolute;
+}
+
+img.title {
+    height: 10mm;
+}
+
+.title {
+    font-size: 5mm;
+}
+
+.beta {
+    margin-top: 2.2mm;
+    position: absolute;
+    left: 48mm;
+}
+
+.headerbt {
+    font-size: 4mm;
+}
+div.headerbt {
+    margin-top: 2.5mm;
+    margin-right: 2mm;
+    right: 0;
+}
+button.headerbt {
+    height: 6mm
+}
+
+div.canvas {
+    overflow: scroll;
+    width: calc( 100vw - 85mm );
+    height: calc(100vh - 10mm);
+    margin-left: 0px;
+    margin-right: 0px;
+    position: absolute;
+    top: 10mm;
+}
+
+div.sidebar {
+    overflow-y: scroll;
+    width: 84.99mm;
+    height: calc(100vh - 10mm);
+    margin-left: 2mm;
+    margin-right: 0;
+    position: absolute;
+    left: calc(100vw - 87mm);
+    top: 10mm;
+}
+.sidebar {
+    font-size: 4mm;
+}
+
+div.avatar1, div.avatar2 {
+    float: left;
+}
+
+div.avatar2 {
+    float: left;
+    padding: 2mm;
+}
+
+button.sidebar {
+    height: 6mm;
+    padding-left: 1mm;
+    padding-left: 2mm;
+}
+
+button.scaling {
+    width: 10mm;
+}
+
+input.name { width: 55mm; }
+input.description { width: 45mm; }
+input.grid { width: 20mm; }
+input.corner { width: 22mm; }
+input.scaling { width: 15mm; }
+input.url { width: 60mm; }
+input.avatarurl { width: 45mm;  }
