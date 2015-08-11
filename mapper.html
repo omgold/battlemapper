@@ -16,6 +16,7 @@ QVR42u3asQ0AIAgEQPbfwGm1wxajFsaj/ISEaz9Ey+k51SxmGDnV7NTy1tnMzMzMzMzMzMzMzMzM
 zMzMzL+Z11duAsrZ1tnMzMzMzMzMzMzMzMzMzMzMzP+a9Z7MzMzMzMzMzMzMzMzMzMzMzP7D9J7M
 zMzMzMzMzMzMzMzMzMzMzP7D9J7MzMzMzMzMzMzMzMzMzMzMzP7D9J7MzMzMzMzMzMzMzMzMzMzM
 zM+YB4pKpbTFzUk/AAAAAElFTkSuQmCC" draggable="false" onClick="doClickImage( event )" onLoad="adjustFrame()" ondragstart="return false;" ondragover="allowDrop(event)" ondrop="dropOnImage(event)" style="position: absolute; -moz-user-select: none; user-drag: none">
+<div id="grid" draggable="false" onClick="doClickImage( event )" onLoad="adjustFrame()" ondragstart="return false;" ondragover="allowDrop(event)" ondrop="dropOnImage(event)" style="background-image: url(grid.png); background-origin: content-box; visibility: hidden; position: absolute; -moz-user-select: none; user-drag: none; width: 100%; height: 100%"><img id="corner1" src="grid-corner.png" style="position: absolute; top: -18px; left: -18px"><img id="corner2" src="grid-corner.png" style="position: absolute; top: 462px; left: 462px"></div>
 </div><div class="sidebar" id="sidebar">
 <fieldset>
 <legend>Source Image</legend>
@@ -23,7 +24,7 @@ Image URL:<br><input class="url" id="url" type="url" draggable="false" ondragove
 Scaling:<br><input class="scaling" id="scale" type="number" size="6" maxlength="15"/>%<button class="sidebar" id="set-scale" type="button" onclick="doSetScale()"/>set</button><nobr><button class="sidebar scaling" id="decrease-scale" type="button" onclick="doChangeScale(1./1.2)">-</button><button class="sidebar scaling" id="increase-scale" type="button" onclick="doChangeScale(1.2)">+</button></nobr><p>
 Corner 1:<br><input class="corner" id="x1" type="number" size="6" maxlength="15"/> / <input class="corner" id="y1" type="number" size=6 maxlength=15><button class="sidebar" id="pick1" type="button" onclick="doPickCorner1()">pick</button><button class="sidebar" id="set1" type="button" onclick="doSetCorner1()">set</button><p>
 Corner 2:<br><input class="corner" id="x2" type="number" size="6" maxlength="15"/> / <input class="corner" id="y2" type="number" size=6 maxlength=15><button class="sidebar" id="pick2" type="button" onclick="doPickCorner2()">pick</button><button class="sidebar" id="set1" type="button" onclick="doSetCorner2()">set</button><p>
-Grid:<br><input class="grid" id="gx" type="number" size="6" maxlength="15"/> x <input class="grid" id="gy" type="number" size="6" maxlength="15"/><button class="sidebar" id="set-grid" type="button" onclick="doSetGrid()">set</button><p>
+Grid:<br><input class="grid" id="gx" type="number" size="6" maxlength="15"/> x <input class="grid" id="gy" type="number" size="6" maxlength="15"/><button class="sidebar" id="set-grid" type="button" onclick="doSetGrid()">set</button> show: <input id="showgrid" type="checkbox" onclick="doShowGrid()"><p>
 </fieldset>
 <button class="sidebar" id="add-char" type="button" onclick="doAddChar()" style="margin-left: 0; margin-top: 1mm; margin-bottom: 1mm">add creature/character</button>
 <button class="sidebar" id="add-area-effect" type="button" onclick="doAddAreaEffect()" style="margin-left: 0; margin-top: 1mm; margin-bottom: 1mm">add area effect</button>

@@ -216,6 +216,7 @@ function adjustFrame() {
         map.width = map.naturalWidth * scale.value / 100;
     }
     map.style.top = 0;
+    adjustGrid();
     for( creature_id in config.creatures )
     {
         adjustCharImage( creature_id );
@@ -223,6 +224,40 @@ function adjustFrame() {
     for( effect_id in config.effects )
     {
         adjustEffectImage( effect_id );
+    }
+}
+
+function adjustGrid() {
+    var scale = document.getElementById( "scale" );
+    var map_width = map.naturalWidth * scale.value / 100;
+    var map_height = map.naturalHeight * scale.value / 100;
+    var gridsize_x = Math.abs( config.x2 - config.x1 ) * map_width / config.gx;
+    var gridsize_y = Math.abs( config.y2 - config.y1 ) * map_height / config.gy;
+    var left = Math.min( config.x1, config.x2 ) * map_width;
+    var top = Math.min( config.y1, config.y2 ) * map_height;
+    var right = Math.max( config.x1, config.x2 ) * map_width;
+    var bottom = Math.max( config.y1, config.y2 ) * map_height;
+    var grid = document.getElementById("grid");
+    grid.style["background-size"] = gridsize_x*20+"px "+gridsize_y*20+"px";
+    grid.style["width"] = map_width - left;
+    grid.style["height"] = map_height - top;
+    grid.style["padding-left"] = left - 0.7*gridsize_x/20;
+    grid.style["padding-top"] = top - 0.7*gridsize_y/20;
+    var corner1 = document.getElementById("corner1");
+    var corner2 = document.getElementById("corner2");
+    corner1.style["top"] = ( top-20 ) + "px";
+    corner1.style["left"] = ( left-20 ) + "px";
+    corner2.style["top"] = ( bottom-20 ) + "px";
+    corner2.style["left"] = ( right-20 ) + "px";
+}
+
+function doShowGrid() {
+    var show = document.getElementById( "showgrid" ).checked;
+    var grid = document.getElementById("grid");
+    if ( show ) {
+        grid.style.visibility = "visible";
+    } else {
+        grid.style.visibility = "hidden";
     }
 }
 
@@ -394,6 +429,7 @@ function doSetCorner1()
     var yo = document.getElementById( "y1" );
     config.x1 = xo.value;
     config.y1 = yo.value;
+    adjustGrid();
     for( creature_id in config.creatures )
     {
         adjustCharImage( creature_id );
@@ -411,6 +447,7 @@ function doSetCorner2()
     var yo = document.getElementById( "y2" );
     config.x2 = xo.value;
     config.y2 = yo.value;
+    adjustGrid();
     for( creature_id in config.creatures )
     {
         adjustCharImage( creature_id );
@@ -443,6 +480,7 @@ function doClickImage( event ) {
     xo.value = x;
     yo.value = y;
     pick_mode = 0;
+    adjustGrid();
     for( creature_id in config.creatures )
     {
         adjustCharImage( creature_id );
@@ -536,6 +574,7 @@ function doSetGrid() {
     var gy = document.getElementById( "gy" );
     config.gx = gx.value;
     config.gy = gy.value;
+    adjustGrid();
     for( creature_id in config.creatures )
     {
         adjustCharImage( creature_id );
@@ -746,8 +785,8 @@ function doAddAreaEffect( effect_id ) {
     img.addEventListener( "drop", function( event ) { dropOnImage( event ) } );
     img.style.position="absolute";
     var canvas = document.getElementById( "canvas" );
-    var map = document.getElementById( "map" );
-    canvas.insertBefore( img, map.nextSibling );
+    var grid = document.getElementById( "grid" );
+    canvas.insertBefore( img, grid.nextSibling );
     if ( effect_config != null )
     {
         type.value = effect_config.type;
