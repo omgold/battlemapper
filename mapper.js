@@ -497,6 +497,8 @@ function saveConfig() {
 }
 
 function doLoad() {
+    var showgrid = document.getElementById( "showgrid" );
+    showgrid.checked = false;
     if ( window.sessionStorage.config == null ) {
         config.creatures = {}
         config.effects = {}
@@ -543,6 +545,7 @@ function doLoad() {
         for( id in config.effects) {
             doAddAreaEffect( id );
         }
+        adjustFrame();
     }
 }
 
