@@ -201,7 +201,7 @@ function dropOnCharUrl( event ) {
 function dropOnCharImg( event ) {
     event.preventDefault();
     var id = event.dataTransfer.getData("text");
-    var url = document.getElementById( "creature-url-"+ event.target.parentElement.name );
+    var url = document.getElementById( "creature-url-"+ event.target.parentElement.parentElement.name );
     url.value = id;
     doSetCharImage( url.parentElement.name );
 }
