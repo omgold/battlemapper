@@ -1,10 +1,12 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head style="margin-top: 0px margin-bottom: 0px">
 <title>The Battlemapper</title>
-<meta name="description" content="Mapping tool to use for play-by-post RPG." />
-<meta name="keywords" content="map, rpg, pbp, play-by-post, dnd, dungeons, dragons, pathfinder" />
-<link rel="shortcut icon" href="battlemapper-favicon.ico" type="image/x-icon" />
-<script language="javascript" src="mapper.js"></script>
+<meta charset="utf-8">
+<meta name="description" content="Mapping tool to use for play-by-post RPG.">
+<meta name="keywords" content="map, rpg, pbp, play-by-post, dnd, dungeons, dragons, pathfinder">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<script src="mapper.js"></script>
 <link rel="stylesheet" type="text/css" href="mapper.css">
 </head>
 <body onLoad="doLoad()" style="margin-top: 0vh; margin-bottom: 2mm">
@@ -21,15 +23,14 @@ zM+YB4pKpbTFzUk/AAAAAElFTkSuQmCC" draggable="false" onClick="doClickImage( event
 </div><div class="sidebar" id="sidebar">
 <fieldset>
 <legend>Source Image</legend>
-Image URL:<br><input class="url" id="url" type="url" draggable="false" ondragover="allowDrop(event)" ondrop="dropOnUrl(event)" size="20" maxlength="1000"/><button class="sidebar" id="set-image" type="button" onclick="doSetImage()">set</button><p>
-Scaling:<br><input class="scaling" id="scale" type="number" size="6" maxlength="15"/>%<button class="sidebar" id="set-scale" type="button" onclick="doSetScale()"/>set</button><nobr><button class="sidebar scaling" id="decrease-scale" type="button" onclick="doChangeScale(1./1.2)">-</button><button class="sidebar scaling" id="increase-scale" type="button" onclick="doChangeScale(1.2)">+</button></nobr><p>
-Corner 1:<br><input class="corner" id="x1" type="number" size="6" maxlength="15"/> / <input class="corner" id="y1" type="number" size=6 maxlength=15><button class="sidebar" id="pick1" type="button" onclick="doPickCorner1()">pick</button><button class="sidebar" id="set1" type="button" onclick="doSetCorner1()">set</button><p>
-Corner 2:<br><input class="corner" id="x2" type="number" size="6" maxlength="15"/> / <input class="corner" id="y2" type="number" size=6 maxlength=15><button class="sidebar" id="pick2" type="button" onclick="doPickCorner2()">pick</button><button class="sidebar" id="set1" type="button" onclick="doSetCorner2()">set</button><p>
-Grid:<br><input class="grid" id="gx" type="number" size="6" maxlength="15"/> x <input class="grid" id="gy" type="number" size="6" maxlength="15"/><button class="sidebar" id="set-grid" type="button" onclick="doSetGrid()">set</button> show: <input id="showgrid" type="checkbox" onclick="doShowGrid()"><p>
+Image URL:<br><input class="url" id="url" type="url" draggable="false" ondragover="allowDrop(event)" ondrop="dropOnUrl(event)" maxlength="1000"/><button class="sidebar" id="set-image" type="button" onclick="doSetImage()">set</button><p>
+Scaling:<br><input class="scaling" id="scale" type="number"/>%<button class="sidebar" id="set-scale" type="button" onclick="doSetScale()">set</button><button class="sidebar scaling" id="decrease-scale" type="button" onclick="doChangeScale(1./1.2)">-</button><button class="sidebar scaling" id="increase-scale" type="button" onclick="doChangeScale(1.2)">+</button><p>
+Corner 1:<br><input class="corner" id="x1" type="number"> / <input class="corner" id="y1" type="number"><button class="sidebar" id="pick1" type="button" onclick="doPickCorner1()">pick</button><button class="sidebar" id="set1" type="button" onclick="doSetCorner1()">set</button><p>
+Corner 2:<br><input class="corner" id="x2" type="number"> / <input class="corner" id="y2" type="number"><button class="sidebar" id="pick2" type="button" onclick="doPickCorner2()">pick</button><button class="sidebar" id="set2" type="button" onclick="doSetCorner2()">set</button><p>
+Grid:<br><input class="grid" id="gx" type="number"> x <input class="grid" id="gy" type="number"><button class="sidebar" id="set-grid" type="button" onclick="doSetGrid()">set</button> show: <input id="showgrid" type="checkbox" onclick="doShowGrid()"><p>
 </fieldset>
 <button class="sidebar" id="add-char" type="button" onclick="doAddChar()" style="margin-left: 0; margin-top: 1mm; margin-bottom: 1mm">add creature/character</button>
 <button class="sidebar" id="add-area-effect" type="button" onclick="doAddAreaEffect()" style="margin-left: 0; margin-top: 1mm; margin-bottom: 1mm">add area effect</button>
-</div>
 </div>
 </body>
 </html>
