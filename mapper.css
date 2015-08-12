@@ -132,7 +132,7 @@ button.scaling {
 input.name { width: 55mm; }
 input.description { width: 45mm; }
 input.grid { width: 15mm; }
-input.corner { width: 22mm; }
+input.corner { width: 20mm; }
 input.scaling { width: 15mm; }
 input.url { width: 60mm; }
 input.avatarurl { width: 45mm;  }
