@@ -64,8 +64,8 @@ function placeChar( id )
     var top = Math.min( config.y1, config.y2 );
     var offset_x = ( gridsize_x * map_width * size - char_width ) / 2;
     var offset_y = ( gridsize_y * map_height * size - char_height ) / 2;
-    char.style.left = ( char_config.x * gridsize_x + left ) * map_width + offset_x;
-    char.style.top = ( char_config.y * gridsize_y + top ) * map_height + offset_y;
+    char.style.left = ( char_config.x * gridsize_x + left ) * map_width + offset_x + "px";
+    char.style.top = ( char_config.y * gridsize_y + top ) * map_height + offset_y + "px";
     char.width = char.width;
 }
 
@@ -81,8 +81,8 @@ function placeEffect( id )
     var rect = map.getBoundingClientRect();
     var left = Math.min( config.x1, config.x2 );
     var top = Math.min( config.y1, config.y2 );
-    effect.style.left = ( effect_config.x * gridsize_x + left ) * map_width;
-    effect.style.top = ( effect_config.y * gridsize_y + top ) * map_height;
+    effect.style.left = ( effect_config.x * gridsize_x + left ) * map_width + "px";
+    effect.style.top = ( effect_config.y * gridsize_y + top ) * map_height + "px";
     effect.width = effect.width;
 }
 
@@ -215,7 +215,7 @@ function adjustFrame() {
     } else {
         map.width = map.naturalWidth * scale.value / 100;
     }
-    map.style.top = 0;
+    map.style.top = "0px";
     adjustGrid();
     for( creature_id in config.creatures )
     {
@@ -239,10 +239,10 @@ function adjustGrid() {
     var bottom = Math.max( config.y1, config.y2 ) * map_height;
     var grid = document.getElementById("grid");
     grid.style["background-size"] = gridsize_x*20+"px "+gridsize_y*20+"px";
-    grid.style["width"] = map_width - left;
-    grid.style["height"] = map_height - top;
-    grid.style["padding-left"] = left - 0.7*gridsize_x/20;
-    grid.style["padding-top"] = top - 0.7*gridsize_y/20;
+    grid.style["width"] = (map_width - left ) + "px";
+    grid.style["height"] = ( map_height - top ) + "px";
+    grid.style["padding-left"] = (left - 0.7*gridsize_x/20 ) + "px";
+    grid.style["padding-top"] = (top - 0.7*gridsize_y/20 ) + "px";
     var corner1 = document.getElementById("corner1");
     var corner2 = document.getElementById("corner2");
     corner1.style["top"] = ( top-20 ) + "px";
