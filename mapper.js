@@ -4,6 +4,7 @@ var next_char_id = 0;
 var next_effect_id = 0;
 
 var effect_types = {
+    s5: { img: "area-5ft-radius.png", text: "5 ft square", sx: 1, sy: 1 },
     r5: { img: "area-5ft-radius.png", text: "5 ft radius", sx: 2, sy: 2 },
     r10: { img: "area-10ft-radius.png", text: "10 ft radius", sx: 4, sy: 4 },
     r20: { img: "area-20ft-radius.png", text: "20 ft radius", sx: 8, sy: 8 },
@@ -715,7 +716,7 @@ function doAddAreaEffect( effect_id ) {
         var effect_config = null;
         effect_id = next_effect_id.toString();
         next_effect_id++;
-        config.effects[effect_id]={color:"red",desc:"",type:"r5",x:0,y:0}
+        config.effects[effect_id]={color:"red",desc:"",type:"s5",x:0,y:0}
         saveConfig();
     } else {
         effect_id = parseInt( effect_id );
