@@ -11,7 +11,3 @@ print "var config = $config_str;"
 window.sessionStorage.config = JSON.stringify( config );
 window.location.replace("/mapper.html");
 </script>
-<?php
-#print $res;
-print mysql_result( $res, 0 );
-?>
