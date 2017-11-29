@@ -35,11 +35,16 @@ var effect_colors = {
     purple: { text: "purple", angle: 300 }
 }
 
+var last_touch_start_event = null;
+var last_drag_start_event = null;
+
 function startDrag( event ) {
     event.dataTransfer.setData( "text", event.target.id );
+    last_drag_start_event = event;
 }
 
 function startTouch( event ) {
+    last_touch_start_event = event.changedTouches[0];
 }
 
 function allowDrop( event ) {
@@ -94,9 +99,6 @@ function dropOnImage( event ) {
     {
         var char = document.getElementById( id );
         var char_config = config.creatures[char.name];
-        var size = char_config.size;
-        if ( size == undefined )
-            size = 1;
         var map = document.getElementById("map");
         var map_width = map.width;
         var map_height = map.height;
@@ -105,17 +107,21 @@ function dropOnImage( event ) {
         var rect = map.getBoundingClientRect();
         var left = Math.min( config.x1, config.x2 );
         var top = Math.min( config.y1, config.y2 );
-        var x = ( event.clientX - rect.left ) / map_width - left;
-        var y = ( event.clientY - rect.top ) / map_height - top;
-        char_config.x = Math.round( x/gridsize_x - size/2. );
-        char_config.y = Math.round( y/gridsize_y - size/2. );
+        var old_x = ( last_drag_start_event.clientX - rect.left ) / map_width - left;
+        var old_y = ( last_drag_start_event.clientY - rect.top ) / map_height - top;
+        var new_x = ( event.clientX - rect.left ) / map_width - left;
+        var new_y = ( event.clientY - rect.top ) / map_height - top;
+        var old_sq_x = Math.round( old_x/gridsize_x - 0.5 );
+        var old_sq_y = Math.round( old_y/gridsize_y - 0.5 );
+        var new_sq_x = Math.round( new_x/gridsize_x - 0.5 );
+        var new_sq_y = Math.round( new_y/gridsize_y - 0.5 );
+        char_config.x += new_sq_x - old_sq_x;
+        char_config.y += new_sq_y - old_sq_y;
         placeChar( char.name );
         saveConfig();
     } else if ( id.search( /^effect-img-/ ) != -1 ) {
         var effect = document.getElementById( id );
         var effect_config = config.effects[effect.name];
-        var sizex = effect_types[effect_config.type].sx;
-        var sizey = effect_types[effect_config.type].sy;
         var map = document.getElementById("map");
         var map_width = map.width;
         var map_height = map.height;
@@ -124,10 +130,16 @@ function dropOnImage( event ) {
         var rect = map.getBoundingClientRect();
         var left = Math.min( config.x1, config.x2 );
         var top = Math.min( config.y1, config.y2 );
-        var x = ( event.clientX - rect.left ) / map_width - left;
-        var y = ( event.clientY - rect.top ) / map_height - top;
-        effect_config.x = Math.round( x/gridsize_x - sizex/2. );
-        effect_config.y = Math.round( y/gridsize_y - sizey/2. );
+        var old_x = ( last_drag_start_event.clientX - rect.left ) / map_width - left;
+        var old_y = ( last_drag_start_event.clientY - rect.top ) / map_height - top;
+        var new_x = ( event.clientX - rect.left ) / map_width - left;
+        var new_y = ( event.clientY - rect.top ) / map_height - top;
+        var old_sq_x = Math.round( old_x/gridsize_x - 0.5 );
+        var old_sq_y = Math.round( old_y/gridsize_y - 0.5 );
+        var new_sq_x = Math.round( new_x/gridsize_x - 0.5 );
+        var new_sq_y = Math.round( new_y/gridsize_y - 0.5 );
+        effect_config.x += new_sq_x - old_sq_x;
+        effect_config.y += new_sq_y - old_sq_y;
         placeEffect( effect.name );
         saveConfig();
     } else {
@@ -139,46 +151,37 @@ function dropOnImage( event ) {
 }
 
 function endTouch( event ) {
-    var touch = event.changedTouches[0];
+    var touch_start = last_touch_start_event;
+    var touch_end = event.changedTouches[0];
     var char = event.target;
     var char_config = config.creatures[char.name];
-    var size = char_config.size;
-    if ( size == undefined )
-        size = 1;
     var map = document.getElementById("map");
     var map_width = map.width;
     var map_height = map.height;
     var gridsize_x = Math.abs( config.x2 - config.x1 ) / config.gx;
     var gridsize_y = Math.abs( config.y2 - config.y1 ) / config.gy;
-    var rect = map.getBoundingClientRect();
-    var left = Math.min( config.x1, config.x2 );
-    var top = Math.min( config.y1, config.y2 );
-    var x = ( touch.clientX - rect.left ) / map_width - left;
-    var y = ( touch.clientY - rect.top ) / map_height - top;
-    char_config.x = Math.round( x/gridsize_x - size/2. );
-    char_config.y = Math.round( y/gridsize_y - size/2. );
+    var dx = ( touch_end.clientX - touch_start.clientX ) / map_width;
+    var dy = ( touch_end.clientY - touch_start.clientY ) / map_height;
+    char_config.x += Math.round( dx/gridsize_x );
+    char_config.y += Math.round( dy/gridsize_y );
     placeChar( char.name );
     saveConfig();
 }
 
 function endTouchEffect( event ) {
-    var touch = event.changedTouches[0];
+    var touch_start = last_touch_start_event;
+    var touch_end = event.changedTouches[0];
     var effect = event.target;
     var effect_config = config.effects[effect.name];
-    var sizex = effect_types[effect_config.type].sx;
-    var sizey = effect_types[effect_config.type].sy;
     var map = document.getElementById("map");
     var map_width = map.width;
     var map_height = map.height;
     var gridsize_x = Math.abs( config.x2 - config.x1 ) / config.gx;
     var gridsize_y = Math.abs( config.y2 - config.y1 ) / config.gy;
-    var rect = map.getBoundingClientRect();
-    var left = Math.min( config.x1, config.x2 );
-    var top = Math.min( config.y1, config.y2 );
-    var x = ( touch.clientX - rect.left ) / map_width - left;
-    var y = ( touch.clientY - rect.top ) / map_height - top;
-    effect_config.x = Math.round( x/gridsize_x - sizex/2. );
-    effect_config.y = Math.round( y/gridsize_y - sizey/2. );
+    var dx = ( touch_end.clientX - touch_start.clientX ) / map_width;
+    var dy = ( touch_end.clientY - touch_start.clientY ) / map_height;
+    effect_config.x += Math.round( dx/gridsize_x );
+    effect_config.y += Math.round( dy/gridsize_y );
     placeEffect( effect.name );
     saveConfig();
 }
