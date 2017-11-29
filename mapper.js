@@ -242,8 +242,8 @@ function adjustGrid() {
     grid.style["background-size"] = gridsize_x*20+"px "+gridsize_y*20+"px";
     grid.style["width"] = (map_width - left ) + "px";
     grid.style["height"] = ( map_height - top ) + "px";
-    grid.style["padding-left"] = (left - 0.7*gridsize_x/20 ) + "px";
-    grid.style["padding-top"] = (top - 0.7*gridsize_y/20 ) + "px";
+    grid.style["padding-left"] = (left + 0.961*gridsize_x ) + "px";
+    grid.style["padding-top"] = (top + 0.961*gridsize_y ) + "px";
     var corner1 = document.getElementById("corner1");
     var corner2 = document.getElementById("corner2");
     corner1.style["top"] = ( top-20 ) + "px";
