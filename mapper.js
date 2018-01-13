@@ -4,26 +4,127 @@ var next_char_id = 0;
 var next_effect_id = 0;
 
 var effect_types = {
-    s5: { img: "area-5ft-radius.png", text: "5 ft square", sx: 1, sy: 1 },
-    r5: { img: "area-5ft-radius.png", text: "5 ft radius", sx: 2, sy: 2 },
-    r10: { img: "area-10ft-radius.png", text: "10 ft radius", sx: 4, sy: 4 },
-    r20: { img: "area-20ft-radius.png", text: "20 ft radius", sx: 8, sy: 8 },
-    c15n: { img: "area-15ft-n-cone.png", text: "15 ft cone (to north)", sx: 3, sy: 3 },
-    c15e: { img: "area-15ft-e-cone.png", text: "15 ft cone (to east)", sx: 3, sy: 3 },
-    c15s: { img: "area-15ft-s-cone.png", text: "15 ft cone (to south)", sx: 3, sy: 3 },
-    c15w: { img: "area-15ft-w-cone.png", text: "15 ft cone (to west)", sx: 3, sy: 3 },
-    c15ne: { img: "area-15ft-ne-cone.png", text: "15 ft cone (to north-east)", sx: 3, sy: 3 },
-    c15se: { img: "area-15ft-se-cone.png", text: "15 ft cone (to south-east)", sx: 3, sy: 3 },
-    c15sw: { img: "area-15ft-sw-cone.png", text: "15 ft cone (to south-west)", sx: 3, sy: 3 },
-    c15nw: { img: "area-15ft-nw-cone.png", text: "15 ft cone (to north-west)", sx: 3, sy: 3 },
-    c30n: { img: "area-30ft-n-cone.png", text: "30 ft cone (to north)", sx: 8, sy: 6 },
-    c30e: { img: "area-30ft-e-cone.png", text: "30 ft cone (to east)", sx: 6, sy: 8 },
-    c30s: { img: "area-30ft-s-cone.png", text: "30 ft cone (to south)", sx: 8, sy: 6 },
-    c30w: { img: "area-30ft-w-cone.png", text: "30 ft cone (to west)", sx: 6, sy: 8 },
-    c30ne: { img: "area-30ft-ne-cone.png", text: "30 ft cone (to north-east)", sx: 6, sy: 6 },
-    c30se: { img: "area-30ft-se-cone.png", text: "30 ft cone (to south-east)", sx: 6, sy: 6 },
-    c30sw: { img: "area-30ft-sw-cone.png", text: "30 ft cone (to south-west)", sx: 6, sy: 6 },
-    c30nw: { img: "area-30ft-nw-cone.png", text: "30 ft cone (to north-west)", sx: 6, sy: 6 }
+    s5: { img: "area-5ft-radius.png", text: "5 ft", sx: 1, sy: 1 },
+    r5: { img: "area-5ft-radius.png", text: "5 ft", sx: 2, sy: 2 },
+    r10: { img: "area-10ft-radius.png", text: "10 ft", sx: 4, sy: 4 },
+    r20: { img: "area-20ft-radius.png", text: "20 ft", sx: 8, sy: 8 },
+    r40: { img: "area-40ft-radius.png", text: "40 ft", sx: 16, sy: 16 },
+    r80: { img: "area-80ft-radius.png", text: "80 ft", sx: 32, sy: 32 },
+    c15n: { img: "area-15ft-n-cone.png", text: "to north", sx: 3, sy: 3 },
+    c15e: { img: "area-15ft-e-cone.png", text: "to east", sx: 3, sy: 3 },
+    c15s: { img: "area-15ft-s-cone.png", text: "to south", sx: 3, sy: 3 },
+    c15w: { img: "area-15ft-w-cone.png", text: "to west", sx: 3, sy: 3 },
+    c15nalt: { img: "area-15ft-n-cone-alt.png", text: "to north (alternative)", sx: 4, sy: 3 },
+    c15ealt: { img: "area-15ft-e-cone-alt.png", text: "to east (alternative)", sx: 3, sy: 4 },
+    c15salt: { img: "area-15ft-s-cone-alt.png", text: "to south (alternative)", sx: 4, sy: 3 },
+    c15walt: { img: "area-15ft-w-cone-alt.png", text: "to west (alternative)", sx: 3, sy: 4 },
+    c15ne: { img: "area-15ft-ne-cone.png", text: "to north-east", sx: 3, sy: 3 },
+    c15se: { img: "area-15ft-se-cone.png", text: "to south-east", sx: 3, sy: 3 },
+    c15sw: { img: "area-15ft-sw-cone.png", text: "to south-west", sx: 3, sy: 3 },
+    c15nw: { img: "area-15ft-nw-cone.png", text: "to north-west", sx: 3, sy: 3 },
+    c15nealt: { img: "area-15ft-ne-cone-alt.png", text: "to north-east (alternative)", sx: 3, sy: 3 },
+    c15sealt: { img: "area-15ft-se-cone-alt.png", text: "to south-east (alternative)", sx: 3, sy: 3 },
+    c15swalt: { img: "area-15ft-sw-cone-alt.png", text: "to south-west (alternative)", sx: 3, sy: 3 },
+    c15nwalt: { img: "area-15ft-nw-cone-alt.png", text: "to north-west (alternative)", sx: 3, sy: 3 },
+    c20n: { img: "area-20ft-n-cone.png", text: "to north", sx: 6, sy: 4 },
+    c20e: { img: "area-20ft-e-cone.png", text: "to east", sx: 4, sy: 6 },
+    c20s: { img: "area-20ft-s-cone.png", text: "to south", sx: 6, sy: 4 },
+    c20w: { img: "area-20ft-w-cone.png", text: "to west", sx: 4, sy: 6 },
+    c20ne: { img: "area-20ft-ne-cone.png", text: "to north-east", sx: 4, sy: 4 },
+    c20se: { img: "area-20ft-se-cone.png", text: "to south-east", sx: 4, sy: 4 },
+    c20sw: { img: "area-20ft-sw-cone.png", text: "to south-west", sx: 4, sy: 4 },
+    c20nw: { img: "area-20ft-nw-cone.png", text: "to north-west", sx: 4, sy: 4 },
+    c30n: { img: "area-30ft-n-cone.png", text: "to north", sx: 8, sy: 6 },
+    c30e: { img: "area-30ft-e-cone.png", text: "to east", sx: 6, sy: 8 },
+    c30s: { img: "area-30ft-s-cone.png", text: "to south", sx: 8, sy: 6 },
+    c30w: { img: "area-30ft-w-cone.png", text: "to west", sx: 6, sy: 8 },
+    c30ne: { img: "area-30ft-ne-cone.png", text: "to north-east", sx: 6, sy: 6 },
+    c30se: { img: "area-30ft-se-cone.png", text: "to south-east", sx: 6, sy: 6 },
+    c30sw: { img: "area-30ft-sw-cone.png", text: "to south-west", sx: 6, sy: 6 },
+    c30nw: { img: "area-30ft-nw-cone.png", text: "to north-west", sx: 6, sy: 6 },
+    c30nealt: { img: "area-30ft-ne-cone-alt.png", text: "to north-east (alternative)", sx: 6, sy: 6 },
+    c30sealt: { img: "area-30ft-se-cone-alt.png", text: "to south-east (alternative)", sx: 6, sy: 6 },
+    c30swalt: { img: "area-30ft-sw-cone-alt.png", text: "to south-west (alternative)", sx: 6, sy: 6 },
+    c30nwalt: { img: "area-30ft-nw-cone-alt.png", text: "to north-west (alternative)", sx: 6, sy: 6 },
+    c40n: { img: "area-40ft-n-cone.png", text: "to north", sx: 10, sy: 8 },
+    c40e: { img: "area-40ft-e-cone.png", text: "to east", sx: 8, sy: 10 },
+    c40s: { img: "area-40ft-s-cone.png", text: "to south", sx: 10, sy: 8 },
+    c40w: { img: "area-40ft-w-cone.png", text: "to west", sx: 8, sy: 10 },
+    c40ne: { img: "area-40ft-ne-cone.png", text: "to north-east", sx: 8, sy: 8 },
+    c40se: { img: "area-40ft-se-cone.png", text: "to south-east", sx: 8, sy: 8 },
+    c40sw: { img: "area-40ft-sw-cone.png", text: "to south-west", sx: 8, sy: 8 },
+    c40nw: { img: "area-40ft-nw-cone.png", text: "to north-west", sx: 8, sy: 8 },
+    c50n: { img: "area-50ft-n-cone.png", text: "to north", sx: 14, sy: 10 },
+    c50e: { img: "area-50ft-e-cone.png", text: "to east", sx: 10, sy: 14 },
+    c50s: { img: "area-50ft-s-cone.png", text: "to south", sx: 14, sy: 10 },
+    c50w: { img: "area-50ft-w-cone.png", text: "to west", sx: 10, sy: 14 },
+    c50ne: { img: "area-50ft-ne-cone.png", text: "to north-east", sx: 10, sy: 10 },
+    c50se: { img: "area-50ft-se-cone.png", text: "to south-east", sx: 10, sy: 10 },
+    c50sw: { img: "area-50ft-sw-cone.png", text: "to south-west", sx: 10, sy: 10 },
+    c50nw: { img: "area-50ft-nw-cone.png", text: "to north-west", sx: 10, sy: 10 },
+    c60n: { img: "area-60ft-n-cone.png", text: "to north", sx: 16, sy: 12 },
+    c60e: { img: "area-60ft-e-cone.png", text: "to east", sx: 12, sy: 16 },
+    c60s: { img: "area-60ft-s-cone.png", text: "to south", sx: 16, sy: 12 },
+    c60w: { img: "area-60ft-w-cone.png", text: "to west", sx: 12, sy: 16 },
+    c60ne: { img: "area-60ft-ne-cone.png", text: "to north-east", sx: 12, sy: 12 },
+    c60se: { img: "area-60ft-se-cone.png", text: "to south-east", sx: 12, sy: 12 },
+    c60sw: { img: "area-60ft-sw-cone.png", text: "to south-west", sx: 12, sy: 12 },
+    c60nw: { img: "area-60ft-nw-cone.png", text: "to north-west", sx: 12, sy: 12 },
+    c60nealt: { img: "area-60ft-ne-cone-alt.png", text: "to north-east (alternative)", sx: 12, sy: 12 },
+    c60sealt: { img: "area-60ft-se-cone-alt.png", text: "to south-east (alternative)", sx: 12, sy: 12 },
+    c60swalt: { img: "area-60ft-sw-cone-alt.png", text: "to south-west (alternative)", sx: 12, sy: 12 },
+    c60nwalt: { img: "area-60ft-nw-cone-alt.png", text: "to north-west (alternative)", sx: 12, sy: 12 },
+    c70n: { img: "area-70ft-n-cone.png", text: "to north", sx: 18, sy: 14 },
+    c70e: { img: "area-70ft-e-cone.png", text: "to east", sx: 14, sy: 18 },
+    c70s: { img: "area-70ft-s-cone.png", text: "to south", sx: 18, sy: 14 },
+    c70w: { img: "area-70ft-w-cone.png", text: "to west", sx: 14, sy: 18 },
+    c70ne: { img: "area-70ft-ne-cone.png", text: "to north-east", sx: 14, sy: 14 },
+    c70se: { img: "area-70ft-se-cone.png", text: "to south-east", sx: 14, sy: 14 },
+    c70sw: { img: "area-70ft-sw-cone.png", text: "to south-west", sx: 14, sy: 14 },
+    c70nw: { img: "area-70ft-nw-cone.png", text: "to north-west", sx: 14, sy: 14 },
+    c80n: { img: "area-80ft-n-cone.png", text: "to north", sx: 22, sy: 16 },
+    c80e: { img: "area-80ft-e-cone.png", text: "to east", sx: 16, sy: 22 },
+    c80s: { img: "area-80ft-s-cone.png", text: "to south", sx: 22, sy: 16 },
+    c80w: { img: "area-80ft-w-cone.png", text: "to west", sx: 6, sy: 22 },
+    c80ne: { img: "area-80ft-ne-cone.png", text: "to north-east", sx: 16, sy: 16 },
+    c80se: { img: "area-80ft-se-cone.png", text: "to south-east", sx: 16, sy: 16 },
+    c80sw: { img: "area-80ft-sw-cone.png", text: "to south-west", sx: 16, sy: 16 },
+    c80nw: { img: "area-80ft-nw-cone.png", text: "to north-west", sx: 16, sy: 16 },
+    c120n: { img: "area-120ft-n-cone.png", text: "to north", sx: 32, sy: 24 },
+    c120e: { img: "area-120ft-e-cone.png", text: "to east", sx: 24, sy: 32 },
+    c120s: { img: "area-120ft-s-cone.png", text: "to south", sx: 32, sy: 6 },
+    c120w: { img: "area-120ft-w-cone.png", text: "to west", sx: 24, sy: 32 },
+    c120ne: { img: "area-120ft-ne-cone.png", text: "to north-east", sx: 24, sy: 24 },
+    c120se: { img: "area-120ft-se-cone.png", text: "to south-east", sx: 24, sy: 24 },
+    c120sw: { img: "area-120ft-sw-cone.png", text: "to south-west", sx: 24, sy: 24 },
+    c120nw: { img: "area-120ft-nw-cone.png", text: "to north-west", sx: 24, sy: 24 },
+    l30ns: { img: "area-30ft-ns-line.png", text: "north-south", sx: 1, sy: 6 },
+    l30ne15: { img: "area-30ft-ne15-line.png", text: "to north-east (15 deg)", sx: 2, sy: 6 },
+    l30ne30: { img: "area-30ft-ne30-line.png", text: "to north-east (30 deg)", sx: 3, sy: 5 },
+    l30ne45: { img: "area-30ft-ne45-line.png", text: "to north-east (45 deg)", sx: 4, sy: 4 },
+    l30en30: { img: "area-30ft-en30-line.png", text: "to east-north (30 deg)", sx: 5, sy: 3 },
+    l30en15: { img: "area-30ft-en15-line.png", text: "to east-north (15 deg)", sx: 6, sy: 2 },
+    l30ew: { img: "area-30ft-ns-line.png", text: "east-west", sx: 6, sy: 1 },
+    l30es15: { img: "area-30ft-es15-line.png", text: "to east-south (15 deg)", sx: 6, sy: 2 },
+    l30es30: { img: "area-30ft-es30-line.png", text: "to east-south (30 deg)", sx: 5, sy: 3 },
+    l30se45: { img: "area-30ft-se45-line.png", text: "to south-east (45 deg)", sx: 4, sy: 4 },
+    l30se30: { img: "area-30ft-se30-line.png", text: "to south-east (30 deg)", sx: 3, sy: 5 },
+    l30se15: { img: "area-30ft-se15-line.png", text: "to south-east (15 deg)", sx: 2, sy: 6 }
+}
+
+var effect_type_groups = {
+    "Square": [ "s5" ],
+    "Radius": [ "r5", "r10", "r20", "r40", "r80" ],
+    "Cone 15ft": [ "c15n", "c15ne", "c15e", "c15se", "c15s", "c15sw", "c15w", "c15nw", "c15nalt", "c15nealt", "c15ealt", "c15sealt", "c15salt", "c15swalt", "c15walt", "c15nwalt" ],
+    "Cone 20ft": [ "c20n", "c20ne", "c20e", "c20se", "c20s", "c20sw", "c20w", "c20nw" ],
+    "Cone 30ft": [ "c30n", "c30ne", "c30e", "c30se", "c30s", "c30sw", "c30w", "c30nw", "c30nealt", "c30sealt", "c30swalt", "c30nwalt" ],
+    "Cone 40ft": [ "c40n", "c40ne", "c40e", "c40se", "c40s", "c40sw", "c40w", "c40nw" ],
+    "Cone 50ft": [ "c50n", "c50ne", "c50e", "c50se", "c50s", "c50sw", "c50w", "c50nw" ],
+    "Cone 60ft": [ "c60n", "c60ne", "c60e", "c60se", "c60s", "c60sw", "c60w", "c60nw", "c60nealt", "c60sealt", "c60swalt", "c60nwalt" ],
+    "Cone 70ft": [ "c70n", "c70ne", "c70e", "c70se", "c70s", "c70sw", "c70w", "c70nw" ],
+    "Cone 80ft": [ "c80n", "c80ne", "c80e", "c80se", "c80s", "c80sw", "c80w", "c80nw" ],
+    "Cone 120ft": [ "c120n", "c120ne", "c120e", "c120se", "c120s", "c120sw", "c120w", "c120nw" ],
+    "Line 30ft": [ "l30ns", "l30ne15", "l30ne30", "l30ne45", "l30en30", "l30en15", "l30ew", "l30es15", "l30es30", "l30se45", "l30se30", "l30se15" ]
 }
 
 var effect_colors = {
@@ -754,12 +855,20 @@ function doAddAreaEffect( effect_id ) {
     var type = document.createElement( "select" );
     type.className = "sidebar";
     type.id="effect-type-"+effect_id;
-    for( kind_id in effect_types ) {
-        kind = effect_types[kind_id];
-        var option = document.createElement( "option" );
-        option.appendChild( document.createTextNode( kind.text ) );
-        option.value = kind_id;
-        type.appendChild( option );
+    for( kind_group_name in effect_type_groups ) {
+        var optgroup = document.createElement( "optgroup" );
+        optgroup.label = kind_group_name;
+        kind_group=effect_type_groups[kind_group_name];
+        count = kind_group.length;
+        for( i=0;i<count;i++ ) {
+            kind_id = kind_group[i];
+            kind = effect_types[kind_id];
+            var option = document.createElement( "option" );
+            option.appendChild( document.createTextNode( kind.text ) );
+            option.value = kind_id;
+            optgroup.appendChild( option );
+        }
+        type.appendChild( optgroup );
     }
     type.style.padding="0.5mm";
     type.style.marginTop="2mm";

@@ -10,15 +10,10 @@
 <link rel="stylesheet" type="text/css" href="mapper.css">
 </head>
 <body onLoad="doLoad()" style="margin-top: 0vh; margin-bottom: 2mm">
-<div class="structure"><img src="battlemapper.png" class="title"/></div><div class="title beta"><b class="title" id="beta">(beta)</b></div>
+<div class="structure"><img src="battlemapper.png" class="title"/></div><div class="title beta"><b class="title" id="version">(v1.0)</b></div>
 <div class="structure headerbt"><form action="save_map.php" method="post" onsubmit="doSaveMap()"><input type="hidden" id="post-config" name="config"/><button class="headerbt" type="submit">save map</button><button class="headerbt" type="button" onclick="doReset()">reset</button><button class="headerbt" type="button" onclick="copyToClipboard( window.sessionStorage.orig_id )">copy URL</button> <a href="usage.html">howto</a> <a href="mailto:support@battlemapper.org">contact</a></form></div>
 <div id="canvas" class="canvas">
-<img id="map" src="data:image/png;base64,
-iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgAQMAAABHGizWAAAABlBMVEUAAAD///+l2Z/dAAAAsUlE
-QVR42u3asQ0AIAgEQPbfwGm1wxajFsaj/ISEaz9Ey+k51SxmGDnV7NTy1tnMzMzMzMzMzMzMzMzM
-zMzMzL+Z11duAsrZ1tnMzMzMzMzMzMzMzMzMzMzMzP+a9Z7MzMzMzMzMzMzMzMzMzMzMzP7D9J7M
-zMzMzMzMzMzMzMzMzMzMzP7D9J7MzMzMzMzMzMzMzMzMzMzMzP7D9J7MzMzMzMzMzMzMzMzMzMzM
-zM+YB4pKpbTFzUk/AAAAAElFTkSuQmCC" draggable="false" onClick="doClickImage( event )" onLoad="adjustFrame()" ondragstart="return false;" ondragover="allowDrop(event)" ondrop="dropOnImage(event)" style="position: absolute; -moz-user-select: none; user-drag: none">
+<img id="map" src="testimg.png" draggable="false" onClick="doClickImage( event )" onLoad="adjustFrame()" ondragstart="return false;" ondragover="allowDrop(event)" ondrop="dropOnImage(event)" style="position: absolute; -moz-user-select: none; user-drag: none">
 <div id="grid" draggable="false" onClick="doClickImage( event )" ondragstart="return false;" ondragover="allowDrop(event)" ondrop="dropOnImage(event)" style="background-image: url(grid.png); background-origin: content-box; visibility: hidden; position: absolute; -moz-user-select: none; user-drag: none; width: 100%; height: 100%"><img id="corner1" src="grid-corner.png" style="position: absolute; top: -18px; left: -18px"><img id="corner2" src="grid-corner.png" style="position: absolute; top: 462px; left: 462px"></div>
 </div><div class="sidebar" id="sidebar">
 <fieldset>
