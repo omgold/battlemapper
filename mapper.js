@@ -655,7 +655,7 @@ function doLoad() {
 }
 
 function copyToClipboard( id ) {
-    window.prompt("Copy URL to clipboard: Ctrl+C, Enter", "http://battlemapper.org/load_map.php?id="+id);
+    window.prompt("Copy URL to clipboard: Ctrl+C, Enter", "https://battlemapper.org/load_map.php?id="+id);
 }
 
 function doSaveMap() {
